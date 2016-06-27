@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var APP_ID = 'sdk_Sky-Integration_809ded04d4';
+    var CHROME_APP_ID = 'sdk_Sky-Integration_809ded04d4';
     var SDK_VERSION = '1.0';
 
     /**
@@ -19,7 +19,7 @@
         });
     }
 
-    InboxSDK.load(SDK_VERSION, APP_ID).then(function (sdk) {
+    InboxSDK.load(SDK_VERSION, CHROME_APP_ID).then(function (sdk) {
         sdk.Compose.registerComposeViewHandler(function (composeView) {
             composeView.addButton({
                 title: "Constituent Information",

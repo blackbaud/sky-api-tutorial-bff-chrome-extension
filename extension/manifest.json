@@ -5,11 +5,15 @@
     "manifest_version": 2,
     "permissions": [
         "activeTab",
+        "identity",
         "https://mail.google.com/*",
-        "https://inbox.google.com/*"
+        "https://inbox.google.com/*",
+        "https://api.sky.blackbaud.com/",
+        "https://oauth2.sky.blackbaud.com/*"
     ],
     "background": {
         "scripts": [
+            "lib/yaml.min.js",
             "lib/jquery-3.0.0.min.js",
             "background.js"
         ],
