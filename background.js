@@ -3,6 +3,12 @@
 
     var config;
 
+    // For local development:
+    // Uncomment the following line of code to get your temporary redirect URI.
+    // It will appear on the background page's console.
+    // Copy and paste this redirect URI into your SKY API Application config.
+    //console.log('OAUTH_REDIRECT_URI', chrome.identity.getRedirectURL('oauth2'));
+
     function checkToken() {
         var webAuthOptions;
 
@@ -10,6 +16,8 @@
             'url': getAuthorizationUrl(),
             'interactive': true
         };
+
+        console.log(webAuthOptions);
 
         return new Promise(function (resolve, reject) {
             chrome.identity.launchWebAuthFlow(webAuthOptions, function (responseUrl) {
@@ -28,7 +36,7 @@
                     {
                         'grant_type': 'authorization_code',
                         'code': urlParams.code,
-                        'redirect_uri': config.OAUTH_REDIRECT_URI
+                        'redirect_uri': chrome.identity.getRedirectURL('oauth2')
                     },
                     {
                         'Authorization': 'Basic ' + btoa(config.OAUTH_CLIENT_ID + ':' + config.OAUTH_SECRET)
@@ -42,7 +50,7 @@
         return config.OAUTH_BASE_URI + 'authorization?' + $.param({
             'client_id': config.OAUTH_CLIENT_ID,
             'response_type': 'code',
-            'redirect_uri': config.OAUTH_REDIRECT_URI
+            'redirect_uri': chrome.identity.getRedirectURL('oauth2')
         });
     }
 

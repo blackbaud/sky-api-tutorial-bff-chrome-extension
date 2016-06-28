@@ -3,11 +3,6 @@
 
     var config;
 
-    // For local development:
-    // Uncomment the following line of code to get your temporary redirect URI.
-    // Copy and paste this redirect URI into your SKY API Application config.
-    // alert(chrome.identity.getRedirectURL('oauth2'));
-
     // Fetch configuration variables and initialize the extension.
     chrome.runtime.sendMessage({
         type: 'getConfig'
