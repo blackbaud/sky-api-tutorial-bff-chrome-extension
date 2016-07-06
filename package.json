@@ -1,0 +1,27 @@
+{
+  "name": "sky-api-tutorial-bff-chrome-extension",
+  "version": "1.0.0",
+  "description": "## Purpose",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blackbaud/sky-api-tutorial-chrome-extension.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blackbaud/sky-api-tutorial-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/blackbaud/sky-api-tutorial-chrome-extension#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-concat-sourcemap": "^0.4.3",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0"
+  }
+}

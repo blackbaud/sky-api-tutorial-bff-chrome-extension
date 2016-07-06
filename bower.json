@@ -1,0 +1,23 @@
+{
+  "name": "sky-api-tutorial-bff-chrome-extension",
+  "description": "## Purpose",
+  "main": "index.js",
+  "authors": [
+    "stevebrush <steve.brush@blackbaud.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/blackbaud/sky-api-tutorial-chrome-extension",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "handlebars": "^4.0.5",
+    "jquery": "^3.0.0",
+    "yamljs": "^0.1.5"
+  },
+  "dependencies": {}
+}

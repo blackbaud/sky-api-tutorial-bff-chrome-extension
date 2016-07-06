@@ -1,0 +1,28 @@
+.sky-api-constituent {
+  font-size: 12.8px;
+
+  .container {
+    padding: 7px 11px 14px;
+  }
+
+  h2 {
+    font-size: 120%;
+    margin-top: 7px;
+    margin-bottom: 11px;
+  }
+
+  .table {
+    > tbody {
+      > tr {
+        > th {
+          font-weight: bold;
+          text-align: left;
+        }
+        > td, th {
+          padding: 7px 11px;
+          background-color: #eee;
+        }
+      }
+    }
+  }
+}
