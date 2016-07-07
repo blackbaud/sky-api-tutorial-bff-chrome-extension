@@ -126,8 +126,8 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
             parseError;
 
         parseError = function (reason) {
-            callback({
-                error: reason.responseJSON.message
+            return callback({
+                error: reason.error || reason.responseJSON.message || JSON.parse(reason.responseText)
             });
         };
 

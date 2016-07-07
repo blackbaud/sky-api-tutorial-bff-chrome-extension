@@ -118,8 +118,8 @@
             parseError;
 
         parseError = function (reason) {
-            callback({
-                error: reason.responseJSON.message
+            return callback({
+                error: reason.error || reason.responseJSON.message || JSON.parse(reason.responseText)
             });
         };
 
