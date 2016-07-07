@@ -4,15 +4,10 @@
     var config,
         session;
 
-    // For local development:
-    // Uncomment the following line of code to get your temporary redirect URI.
-    // It will appear on the background page's console.
-    // Copy and paste this redirect URI into your SKY API Application config.
-    //console.log('OAUTH_REDIRECT_URI', chrome.identity.getRedirectURL('oauth2'));
-
 
     /**
-     *
+     * Provides the current session if the access token is valid.
+     * Otherwise, starts the authorization process to retrieve a new access token.
      */
     function checkAccessToken() {
         return new Promise(function (resolve, reject) {
@@ -26,38 +21,22 @@
 
 
     /**
-     *
-     */
-    function getConstituentByEmailAddress(emailAddress) {
-        return new Promise(function (resolve, reject) {
-            http('GET',
-                'https://api.sky.blackbaud.com/constituent/v1/constituents/search',
-                {
-                    'searchText': emailAddress
-                },
-                {
-                    'bb-api-subscription-key': config.SKY_API_SUBSCRIPTION_KEY,
-                    'Authorization': 'Bearer ' + session.access_token
-                }
-            ).then(resolve).catch(reject);
-        });
-    }
-
-
-    /**
-     *
+     * Starts the authorization flow and retrieving an access token upon success.
      */
     function getAccessToken() {
         return new Promise(function (resolve, reject) {
 
-            // Starts an auth flow at the specified URL.
-            // https://developer.chrome.com/apps/identity#method-launchWebAuthFlow
+            // Starts an authorization flow at the specified URL.
+            //   - https://developer.chrome.com/apps/identity#method-launchWebAuthFlow
             chrome.identity.launchWebAuthFlow(
                 {
                     'url': config.AUTH_SERVICE_BASE_URI + 'authorization',
                     'interactive': true
                 },
-                function (responseUrl) {
+
+                // Retrieves the value of the `code` URL parameter and exchanges it for
+                // an access token.
+                function handleRedirect(responseUrl) {
 
                     // Handle any errors encountered.
                     if (chrome.runtime.lastError) {
@@ -82,18 +61,22 @@
 
 
     /**
-     *
+     * Makes a request to SKY API Constituent Search endpoint:
+     *   - https://developer.sky.blackbaud.com/docs/services/56b76470069a0509c8f1c5b3/operations/56b76471069a050520297727
+     * The search text parameter's value is set to an email address.
      */
-    function refreshAccessToken() {
+    function getConstituentByEmailAddress(emailAddress) {
         return new Promise(function (resolve, reject) {
             http('GET',
-                config.AUTH_SERVICE_BASE_URI + 'refresh-token',
+                'https://api.sky.blackbaud.com/constituent/v1/constituents/search',
                 {
-                    refresh_token: session.refresh_token
+                    'searchText': emailAddress
+                },
+                {
+                    'bb-api-subscription-key': config.SKY_API_SUBSCRIPTION_KEY,
+                    'Authorization': 'Bearer ' + session.access_token
                 }
-            ).then(resolve).catch(function () {
-                getAccessToken().then(resolve).catch(reject);
-            });
+            ).then(resolve).catch(reject);
         });
     }
 
@@ -128,7 +111,7 @@
 
 
     /**
-     * Receives (and returns) messages from the content script.
+     * Receives (and returns) messages from the content.js script.
      */
     function messageHandler(request, sender, callback) {
         var emailAddress,
@@ -160,7 +143,6 @@
                     else {
                         callback(data);
                     }
-
                 }).catch(parseError);
             }).catch(parseError);
             break;
@@ -198,8 +180,27 @@
     }
 
 
+    /**
+     * Attempts to refresh the access token, or get a new one if it has expired.
+     */
+    function refreshAccessToken() {
+        return new Promise(function (resolve, reject) {
+            http('GET',
+                config.AUTH_SERVICE_BASE_URI + 'refresh-token',
+                {
+                    refresh_token: session.refresh_token
+                }
+            ).then(resolve).catch(function () {
+                getAccessToken().then(resolve).catch(reject);
+            });
+        });
+    }
+
+
+    // Stores the response from the authorization microservice.
     session = {};
 
 
+    // Allow content.js to communicate with this script.
     chrome.runtime.onMessage.addListener(messageHandler);
 }());

@@ -1,5 +1,5 @@
 {
-    "name": "SKY API Tutorial: Authorization Code Flow Chrome Extension",
+    "name": "SKY API Tutorial: BFF - Chrome Extension",
     "description": "View constituent data in Gmail",
     "version": "0.0.1",
     "manifest_version": 2,

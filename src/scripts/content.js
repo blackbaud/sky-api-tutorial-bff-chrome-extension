@@ -3,10 +3,10 @@
 
     var config;
 
-    function sendMessage(label, message) {
+    function sendMessage(type, message) {
         return new Promise(function (resolve, reject) {
             chrome.runtime.sendMessage({
-                type: label,
+                type: type,
                 message: message
             }, resolve);
         });
@@ -21,7 +21,6 @@
     }
 
     function init(sdk) {
-
         var showAlert;
 
         showAlert = function (message) {
@@ -31,9 +30,12 @@
             });
         };
 
+        // When the user begins writing a new email...
         sdk.Compose.registerComposeViewHandler(function (composeView) {
+
+            // Add a custom button next to the Submit button.
             composeView.addButton({
-                title: "Get Constituent Information",
+                title: "Constituent Information",
                 iconUrl: chrome.runtime.getURL('build/img/bbicon.png'),
                 onClick: function (event) {
                     showAlert("Attempting to match recipients to constituent records. Please wait...");
@@ -47,7 +49,10 @@
                         source = data;
                         template = Handlebars.compile(source);
 
+                        // For each email address in the <TO> field...
                         event.composeView.getToRecipients().forEach(function (contact) {
+
+                            // Attempt to match the email address with a SKY API constituent record.
                             getConstituentByEmailAddress(contact.emailAddress).then(function (data) {
 
                                 // Something bad happened with the API.
@@ -62,6 +67,7 @@
 
                                 showAlert(data.count + " constituent record(s) found!");
 
+                                // Create a mole view displaying the constituent's information.
                                 data.value.forEach(function (constituent) {
                                     element = document.createElement('div');
                                     element.innerHTML = template({
