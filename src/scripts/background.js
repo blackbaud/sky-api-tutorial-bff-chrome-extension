@@ -133,7 +133,7 @@
                 getConstituentByEmailAddress(emailAddress).then(function (data) {
 
                     // The token has expired. Attempt to refresh.
-                    if (data.StatusCode === 401) {
+                    if (data.statusCode === 401) {
                         refreshAccessToken().then(function () {
                             getConstituentByEmailAddress(emailAddress).then(callback).catch(parseError);
                         }).catch(parseError);

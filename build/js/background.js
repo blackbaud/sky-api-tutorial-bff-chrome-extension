@@ -141,7 +141,7 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
                 getConstituentByEmailAddress(emailAddress).then(function (data) {
 
                     // The token has expired. Attempt to refresh.
-                    if (data.StatusCode === 401) {
+                    if (data.statusCode === 401) {
                         refreshAccessToken().then(function () {
                             getConstituentByEmailAddress(emailAddress).then(callback).catch(parseError);
                         }).catch(parseError);

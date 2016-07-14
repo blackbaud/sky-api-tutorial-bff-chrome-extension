@@ -55,6 +55,6 @@ $  git clone https://github.com/blackbaud/sky-api-tutorial-bff-chrome-extension.
 ### Step 5 — Test the extension
 - Visit [Gmail](http://mail.google.com/) using Google Chrome.
 - Click **Compose** to start writing a new email.
-- In the "To:" field, add the email address `robertcarloshernandez@gmail.com` (this email address belongs to a [demo constituent record](https://renxt.blackbaud.com/constituents/280?tenantid=d698f0de-73f5-4a81-a4b1-ff353509faec)).
+- In the "To:" field, add the email address `robertcarloshernandez1@gmail.com` (this email address belongs to a [demo constituent record](https://renxt.blackbaud.com/constituents/280?tenantid=d698f0de-73f5-4a81-a4b1-ff353509faec)).
 - Click the green "b" icon next to **Send**. This will begin the authorization flow.
 - After successfully authorizing the Chrome extension, a new fly-up should appear at the bottom of the screen, containing the constituent data that matches the email address provided.
