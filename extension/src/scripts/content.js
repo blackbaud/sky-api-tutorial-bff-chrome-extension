@@ -3,15 +3,6 @@
 
     var config;
 
-    function sendMessage(type, message) {
-        return new Promise(function (resolve, reject) {
-            chrome.runtime.sendMessage({
-                type: type,
-                message: message
-            }, resolve);
-        });
-    }
-
     function getConstituentByEmailAddress(emailAddress) {
         return new Promise(function (resolve, reject) {
             sendMessage('apiSearch', {
@@ -30,27 +21,37 @@
             });
         };
 
+        console.log("Inbox SDK installed. Loading dependencies...");
+
         // When the user begins writing a new email...
         sdk.Compose.registerComposeViewHandler(function (composeView) {
 
-            // Add a custom button next to the Submit button.
-            composeView.addButton({
-                title: "Constituent Information",
-                iconUrl: chrome.runtime.getURL('build/img/bbicon.png'),
-                onClick: function (event) {
-                    showAlert("Attempting to match recipients to constituent records. Please wait...");
+            // First, get the Handlebars template for the constituent flyups.
+            sendMessage('getConstituentDetailTemplate').then(function (data) {
+                var source,
+                    template;
 
-                    // First, get the Handlebars template for the constituent flyups.
-                    sendMessage('getConstituentDetailTemplate').then(function (data) {
-                        var element,
-                            source,
-                            template;
+                source = data;
+                template = Handlebars.compile(source);
 
-                        source = data;
-                        template = Handlebars.compile(source);
+                console.log("HTML template loaded. Ready for click events.");
+
+                // Add a custom button next to the Submit button.
+                composeView.addButton({
+                    title: "Constituent Information",
+                    iconUrl: chrome.runtime.getURL('build/img/bbicon.png'),
+                    onClick: function (event) {
+                        var recipients;
+                        recipients = event.composeView.getToRecipients();
+
+                        if (!recipients.length) {
+                            return showAlert("Please enter a valid email address.");
+                        }
+
+                        showAlert("Attempting to match recipients to constituent records. Please wait...");
 
                         // For each email address in the <TO> field...
-                        event.composeView.getToRecipients().forEach(function (contact) {
+                        recipients.forEach(function (contact) {
 
                             // Attempt to match the email address with a SKY API constituent record.
                             getConstituentByEmailAddress(contact.emailAddress).then(function (data) {
@@ -69,6 +70,7 @@
 
                                 // Create a mole view displaying the constituent's information.
                                 data.value.forEach(function (constituent) {
+                                    var element;
                                     element = document.createElement('div');
                                     element.innerHTML = template({
                                         constituent: constituent
@@ -81,15 +83,29 @@
                                 });
                             }).catch(showAlert);
                         });
-                    });
-                }
+                    }
+                });
             });
         });
     }
 
-    // Fetch configuration variables and initialize the extension.
-    sendMessage('getConfig').then(function (data) {
-        config = data;
-        InboxSDK.load(config.CHROME_SDK_VERSION, config.CHROME_APP_ID).then(init);
+    // This method communicates with the background script.
+    function sendMessage(type, message) {
+        return new Promise(function (resolve, reject) {
+            chrome.runtime.sendMessage({
+                type: type,
+                message: message
+            }, resolve);
+        });
+    }
+
+    // Load dependencies and initialize the extension.
+    window.addEventListener("load", function load(event) {
+        console.log("Page loaded. Fetching configuration...");
+        sendMessage('getConfig').then(function (data) {
+            console.log("Extension configuration loaded. Installing SDK...");
+            config = data;
+            InboxSDK.load(config.CHROME_SDK_VERSION, config.CHROME_APP_ID).then(init);
+        });
     });
 }());
