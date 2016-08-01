@@ -91,14 +91,7 @@ $  git clone https://github.com/blackbaud/sky-api-tutorial-bff-pattern
 - Open Terminal/Command Prompt and type:
 ```
 $  dotnet restore
-```
-- On a Mac, type:
-```
-$  export ASPNETCORE_ENVIRONMENT=Development && dotnet run
-```
-- On a PC, type:
-```
-$  set ASPNETCORE_ENVIRONMENT=Development && dotnet run
+$  dotnet run --environment=Development
 ```
 
 ### Step 6 — Test the extension
