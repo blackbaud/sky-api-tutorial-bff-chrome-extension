@@ -1,0 +1,7 @@
+{
+    "AppSettings": {
+        "ClientId": "",
+        "RedirectUri": "https://<extension-id>.chromiumapp.org/oauth2",
+        "Secret": ""
+    }
+}

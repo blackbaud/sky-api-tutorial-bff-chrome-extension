@@ -34,6 +34,8 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
     function getAccessToken() {
         return new Promise(function (resolve, reject) {
 
+            console.log("Starting authorization flow: ", config.AUTH_SERVICE_BASE_URI + 'authorization');
+
             // Starts an authorization flow at the specified URL.
             //   - https://developer.chrome.com/apps/identity#method-launchWebAuthFlow
             chrome.identity.launchWebAuthFlow(
@@ -48,8 +50,9 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
 
                     // Handle any errors encountered.
                     if (chrome.runtime.lastError) {
+                        console.log(chrome.runtime.lastError.message + ' Possible solutions: \n1) Is your SKY API Application redirect URI set to ' + chrome.identity.getRedirectURL('oauth2') + '? \n2) Is your authorization microservice running? \n3) Did you start the authorization microservice in "Development" mode (type, `export ASPNETCORE_ENVIRONMENT=Development && dotnet run`)?');
                         return reject({
-                            error: chrome.runtime.lastError.message
+                            error: chrome.runtime.lastError.message + ' Check the Background Page console for more info.'
                         });
                     }
 
@@ -126,6 +129,12 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
             parseError;
 
         parseError = function (reason) {
+            console.log('parseError:', reason);
+            if (typeof reason === "string") {
+                return callback({
+                    error: reason
+                });
+            }
             return callback({
                 error: reason.error || reason.responseJSON.message || JSON.parse(reason.responseText)
             });
@@ -157,8 +166,7 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
 
         // Get configuration YAML file.
         case 'getConfig':
-            http(
-                'GET',
+            http('GET',
                 chrome.runtime.getURL('config.yml')
             ).then(function (data) {
                 config = YAML.parse(data);
@@ -168,8 +176,7 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
 
         // Get the HTML file used to build the detail flyup.
         case 'getConstituentDetailTemplate':
-            http(
-                'GET',
+            http('GET',
                 chrome.runtime.getURL('src/templates/constituent-detail.html')
             ).then(callback);
             break;

@@ -1,5 +1,5 @@
 {
-  "name": "sky-api-tutorial-bff-chrome-extension",
+  "name": "sky-api-tutorial-bff-pattern",
   "version": "1.0.0",
   "description": "## Purpose",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blackbaud/sky-api-tutorial-chrome-extension.git"
+    "url": "git+https://github.com/blackbaud/sky-api-tutorial-bff-pattern.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/blackbaud/sky-api-tutorial-chrome-extension/issues"
+    "url": "https://github.com/blackbaud/sky-api-tutorial-bff-pattern/issues"
   },
-  "homepage": "https://github.com/blackbaud/sky-api-tutorial-chrome-extension#readme",
+  "homepage": "https://github.com/blackbaud/sky-api-tutorial-bff-pattern#readme",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-concat-sourcemap": "^0.4.3",
