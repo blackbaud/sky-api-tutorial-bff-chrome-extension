@@ -100,7 +100,7 @@
     }
 
     // Load dependencies and initialize the extension.
-    window.addEventListener("load", function load(event) {
+    $(document).ready(function () {
         console.log("Page loaded. Fetching configuration...");
         sendMessage('getConfig').then(function (data) {
             console.log("Extension configuration loaded. Installing SDK...");

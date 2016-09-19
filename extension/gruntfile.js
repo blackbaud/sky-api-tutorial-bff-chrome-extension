@@ -27,6 +27,7 @@ module.exports = function (grunt) {
                 files: {
                     '<%= buildPath %>/js/content.js': [
                         'src/lib/inboxsdk.js',
+                        'bower_components/jquery/dist/jquery.min.js',
                         'bower_components/handlebars/handlebars.min.js',
                         'src/scripts/content.js'
                     ]

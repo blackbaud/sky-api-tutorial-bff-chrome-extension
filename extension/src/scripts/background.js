@@ -128,7 +128,7 @@
                 });
             }
             return callback({
-                error: reason.error || reason.responseJSON.message || JSON.parse(reason.responseText)
+                error: reason.message || reason.error || reason.responseJSON.message || JSON.parse(reason.responseText)
             });
         };
 
@@ -142,7 +142,7 @@
                 getConstituentByEmailAddress(emailAddress).then(function (data) {
 
                     // The token has expired. Attempt to refresh.
-                    if (data.statusCode === 401) {
+                    if (data.responseText && data.responseText.statusCode === 401) {
                         refreshAccessToken().then(function () {
                             getConstituentByEmailAddress(emailAddress).then(callback).catch(parseError);
                         }).catch(parseError);

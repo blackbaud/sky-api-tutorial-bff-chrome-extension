@@ -136,7 +136,7 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
                 });
             }
             return callback({
-                error: reason.error || reason.responseJSON.message || JSON.parse(reason.responseText)
+                error: reason.message || reason.error || reason.responseJSON.message || JSON.parse(reason.responseText)
             });
         };
 
@@ -150,7 +150,7 @@ return j.call(r(a),c)})),b))for(;i>h;h++)b(a[h],c,g?d:d.call(a[h],h,b(a[h],c)));
                 getConstituentByEmailAddress(emailAddress).then(function (data) {
 
                     // The token has expired. Attempt to refresh.
-                    if (data.statusCode === 401) {
+                    if (data.responseText && data.responseText.statusCode === 401) {
                         refreshAccessToken().then(function () {
                             getConstituentByEmailAddress(emailAddress).then(callback).catch(parseError);
                         }).catch(parseError);

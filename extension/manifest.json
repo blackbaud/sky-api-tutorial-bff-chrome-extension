@@ -19,7 +19,7 @@
         "scripts": [
             "build/js/background.min.js"
         ],
-        "persistent": false
+        "persistent": true
     },
     "content_scripts": [{
       "matches": [
