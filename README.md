@@ -90,6 +90,7 @@ $  git clone https://github.com/blackbaud/sky-api-tutorial-bff-pattern
 ### Step 5 — Start the microservice
 - Open Terminal/Command Prompt and type:
 ```
+$  cd microservice
 $  dotnet restore
 $  dotnet run --environment=Development
 ```
