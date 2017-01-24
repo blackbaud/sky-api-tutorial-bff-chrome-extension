@@ -117,10 +117,9 @@
      * Receives (and returns) messages from the content.js script.
      */
     function messageHandler(request, sender, callback) {
-        var emailAddress,
-            parseError;
+        var emailAddress;
 
-        parseError = function (reason) {
+        function parseError(reason) {
             console.log('parseError:', reason);
             if (typeof reason === "string") {
                 return callback({
@@ -130,29 +129,32 @@
             return callback({
                 error: reason.message || reason.error || reason.responseJSON.message || JSON.parse(reason.responseText)
             });
-        };
+        }
 
         switch (request.type) {
+
+        case 'authorizeSession':
+            checkAccessToken().then(function () {
+                callback();
+            }).catch(parseError);
+            break;
 
         // Make a request to the constituent search API.
         // Ideally, these endpoints would live in a microservice of their own.
         case 'apiSearch':
             emailAddress = request.message.emailAddress;
-            checkAccessToken().then(function () {
-                getConstituentByEmailAddress(emailAddress).then(function (data) {
+            getConstituentByEmailAddress(emailAddress).then(function (data) {
+                // The token has expired. Attempt to refresh.
+                if (data.responseText && data.responseText.statusCode === 401) {
+                    refreshAccessToken().then(function () {
+                        getConstituentByEmailAddress(emailAddress).then(callback).catch(parseError);
+                    }).catch(parseError);
+                }
 
-                    // The token has expired. Attempt to refresh.
-                    if (data.responseText && data.responseText.statusCode === 401) {
-                        refreshAccessToken().then(function () {
-                            getConstituentByEmailAddress(emailAddress).then(callback).catch(parseError);
-                        }).catch(parseError);
-                    }
-
-                    // All is well, return the constituent data.
-                    else {
-                        callback(data);
-                    }
-                }).catch(parseError);
+                // All is well, return the constituent data.
+                else {
+                    callback(data);
+                }
             }).catch(parseError);
             break;
 

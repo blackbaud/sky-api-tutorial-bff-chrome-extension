@@ -3,6 +3,10 @@
 
     var config;
 
+    function authorizeSession() {
+        return sendMessage('authorizeSession');
+    }
+
     function getConstituentByEmailAddress(emailAddress) {
         return new Promise(function (resolve, reject) {
             sendMessage('apiSearch', {
@@ -50,39 +54,39 @@
 
                         showAlert("Attempting to match recipients to constituent records. Please wait...");
 
-                        // For each email address in the <TO> field...
-                        recipients.forEach(function (contact) {
+                        authorizeSession().then(function () {
+                            // For each email address in the <TO> field...
+                            recipients.forEach(function (contact) {
+                                // Attempt to match the email address with a SKY API constituent record.
+                                getConstituentByEmailAddress(contact.emailAddress).then(function (data) {
+                                    // Something bad happened with the API.
+                                    if (data.error) {
+                                        return showAlert(data.error);
+                                    }
 
-                            // Attempt to match the email address with a SKY API constituent record.
-                            getConstituentByEmailAddress(contact.emailAddress).then(function (data) {
+                                    // The request to the API was valid, but didn't return any records.
+                                    if (data.count === 0) {
+                                        return showAlert("The recipient email addresses did not match any constituent records.");
+                                    }
 
-                                // Something bad happened with the API.
-                                if (data.error) {
-                                    return showAlert(data.error);
-                                }
+                                    showAlert(data.count + " constituent record(s) found!");
 
-                                // The request to the API was valid, but didn't return any records.
-                                if (data.count === 0) {
-                                    return showAlert("The recipient email addresses did not match any constituent records.");
-                                }
-
-                                showAlert(data.count + " constituent record(s) found!");
-
-                                // Create a mole view displaying the constituent's information.
-                                data.value.forEach(function (constituent) {
-                                    var element;
-                                    element = document.createElement('div');
-                                    element.innerHTML = template({
-                                        constituent: constituent
+                                    // Create a mole view displaying the constituent's information.
+                                    data.value.forEach(function (constituent) {
+                                        var element;
+                                        element = document.createElement('div');
+                                        element.innerHTML = template({
+                                            constituent: constituent
+                                        });
+                                        sdk.Widgets.showMoleView({
+                                            el: element,
+                                            chrome: true,
+                                            title: constituent.name
+                                        });
                                     });
-                                    sdk.Widgets.showMoleView({
-                                        el: element,
-                                        chrome: true,
-                                        title: constituent.name
-                                    });
-                                });
-                            }).catch(showAlert);
-                        });
+                                }).catch(showAlert);
+                            });
+                        }).catch(showAlert);
                     }
                 });
             });
@@ -91,7 +95,7 @@
 
     // This method communicates with the background script.
     function sendMessage(type, message) {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             chrome.runtime.sendMessage({
                 type: type,
                 message: message
