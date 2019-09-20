@@ -16,11 +16,11 @@ This tutorial demonstrates the interaction of a client application with an autho
 ### Sky API Requirements:
 
 - **A Blackbaud Developer Subscription Key**
-    - If you have not already done so, be sure to complete the [Getting started guide](https://apidocs.sky.blackbaud.com/docs/getting-started/). This will guide you through the process of registering for a Blackbaud developer account and requesting a subscription to an API product.
+    - If you have not already done so, be sure to complete the [Getting started guide](https://developer.blackbaud.com/skyapi/docs/getting-started). This will guide you through the process of registering for a Blackbaud developer account and requesting a subscription to an API product.
     - Once approved, your subscription will contain a **Primary Key** and a **Secondary Key**.  You can use either key as the subscription key value for the `bb-api-subscription-key` request header when making calls to the API.
     - You can view your subscription keys on your [Blackbaud Developer Profile](https://developer.sky.blackbaud.com/developer).
 - **A Blackbaud Developer Application ID and Application Secret**
-    - [Register your application](https://developerapp.sky.blackbaud.com/applications) in order to obtain the **Application ID** (client ID) and **Application Secret** (client secret).
+    - [Register your application](https://developer.blackbaud.com/apps/) in order to obtain the **Application ID** (client ID) and **Application Secret** (client secret).
 
 
 ### Step 1 — Clone the files
@@ -66,13 +66,13 @@ $  git clone https://github.com/blackbaud/sky-api-tutorial-bff-pattern
         <tr>
             <td>`AppSettings.ClientID`</td>
             <td>
-                Your SKY API registered application's [Application ID](https://developerapp.sky.blackbaud.com/applications)
+                Your SKY API registered application's [Application ID](https://developer.blackbaud.com/apps/)
             </td>
         </tr>
         <tr>
             <td>`AppSettings.RedirectUri`</td>
             <td>
-                The respective Redirect URI listed under your [registered application](https://developerapp.sky.blackbaud.com/applications)'s Redirect URIs.<br>
+                The respective Redirect URI listed under your [registered application](https://developer.blackbaud.com/apps/)'s Redirect URIs.<br>
                 <ul>
                   <li>The redirect URI follows the pattern `https://<extension-id>.chromiumapp.org/oauth2`.</li>
                   <li>The `<extension-id>` represents the unique ID that is automatically generated when the Chrome extension is uploaded to Google's servers.</li>
